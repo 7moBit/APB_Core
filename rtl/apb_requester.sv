@@ -11,7 +11,7 @@ module apb_requester
 
     // Control Interface
     input  logic                    start,
-    input  logic [GpioWidth-1:0]    addr_in,
+    input  logic [ApbAddrWidth-1:0] addr_in,
     input  logic                    write_in,
     input  logic [ApbDataWidth-1:0] wdata_in,
     output logic                    busy,

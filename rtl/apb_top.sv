@@ -10,11 +10,15 @@ module apb_top
 
     // Control Interface
     input  logic                    start,
-    input  logic [GpioWidth-1:0]    addr_in,
+    input  logic [ApbAddrWidth-1:0] addr_in,
     input  logic                    write_in,
     input  logic [ApbDataWidth-1:0] wdata_in,
     output logic                    busy,
     output logic [ApbDataWidth-1:0] rdata_out,
+
+    input  logic [GpioWidth-1:0]    gpio_i,
+    output logic [GpioWidth-1:0]    gpio_t,
+    output logic [GpioWidth-1:0]    gpio_o
 
 );
     timeunit 1ns/1ps;
@@ -22,16 +26,13 @@ module apb_top
     // APB Entries
     logic [ApbAddrWidth-1:0] PADDR;
     logic                    PSEL;
+    logic [1:0]              psel;
     logic                    PENABLE;
     logic [ApbDataWidth-1:0] PWDATA;
     logic                    PWRITE;
     logic [ApbDataWidth-1:0] PRDATA;
     logic                    PREADY;
 
-    // GPIO Entries
-    logic [GpioWidth-1:0]    gpio_i;
-    logic [GpioWidth-1:0]    gpio_t;
-    logic [GpioWidth-1:0]    gpio_o;
 
 apb_requester #(
     .GpioWidth(GpioWidth),
@@ -67,10 +68,12 @@ apb_decoder #(
 
 apb_completer #(
     .GpioWidth(GpioWidth),
-    .ApbDataWidth(ApbDataWidth)
+    .ApbDataWidth(ApbDataWidth),
+    .ApbAddrWidth(ApbAddrWidth)
 ) completer_inst (
     .PCLK(PCLK),
     .PRESETN(PRESETN),
+    .PADDR(PADDR),
     .PSEL(psel[0]),
     .PENABLE(PENABLE),
     .PWDATA(PWDATA),
