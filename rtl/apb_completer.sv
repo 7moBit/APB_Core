@@ -4,7 +4,7 @@ module apb_completer
     parameter GpioWidth = 8,
     parameter ApbDataWidth = 32,
     parameter ApbAddrWidth = 32,
-    localparam int NumRegs = 6;
+    localparam int NumRegs = 6
 ) (
     input  logic                    PCLK,
     input  logic                    PRESETN,
@@ -26,7 +26,7 @@ module apb_completer
     logic [ApbDataWidth-1:0]      regs [NumRegs];
     logic [$clog2(NumRegs)-1:0]   reg_index;
 
-    assign reg_index = PADDR[4:2];
+    assign reg_index = PADDR[$clog2(NumRegs)+1:2];
     assign PRDATA    = regs[reg_index];
 
     assign PREADY = PSEL & PENABLE;

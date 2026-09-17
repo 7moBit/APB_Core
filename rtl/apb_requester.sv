@@ -22,7 +22,7 @@ module apb_requester
     output logic                    PSEL,
     output logic                    PENABLE,
     output logic [ApbDataWidth-1:0] PWDATA,
-    input  logic                    PWRITE,
+    output logic                    PWRITE,
     input  logic [ApbDataWidth-1:0] PRDATA,
     input  logic                    PREADY,
 
