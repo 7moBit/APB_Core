@@ -1,7 +1,7 @@
+`timescale 1ns/1ps
 module apb_requester 
     import apb_gpio_pkg::*;
 #(
-    parameter GpioWidth = 8,
     parameter ApbDataWidth = 32,
     parameter ApbAddrWidth = 32
 
@@ -24,16 +24,11 @@ module apb_requester
     output logic [ApbDataWidth-1:0] PWDATA,
     output logic                    PWRITE,
     input  logic [ApbDataWidth-1:0] PRDATA,
-    input  logic                    PREADY,
-
-    // GPIO Entries
-    input  logic [GpioWidth-1:0]    gpio_i,
-    output logic [GpioWidth-1:0]    gpio_t,
-    output logic [GpioWidth-1:0]    gpio_o
+    input  logic                    PREADY
 
 );
 
-    timeunit 1ns/1ps;
+    timeunit 1ns; timeprecision 1ps;
 
     state_t state;
 

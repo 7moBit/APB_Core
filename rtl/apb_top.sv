@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module apb_top 
     import apb_gpio_pkg::*;
 #(
@@ -21,7 +22,7 @@ module apb_top
     output logic [GpioWidth-1:0]    gpio_o
 
 );
-    timeunit 1ns/1ps;
+    timeunit 1ns; timeprecision 1ps;
 
     // APB Entries
     logic [ApbAddrWidth-1:0] PADDR;
@@ -32,15 +33,29 @@ module apb_top
     logic                    PWRITE;
     logic [ApbDataWidth-1:0] PRDATA;
     logic                    PREADY;
+    logic [ApbDataWidth-1:0] gpio_rdata;
+    logic gpio_ready;
+
+    // Assert reset asynchronously; release only after two PCLK edges.
+    (* ASYNC_REG = "TRUE" *) logic [1:0] reset_pipe;
+    wire resetn_sync = reset_pipe[1];
+    always_ff @(posedge PCLK or negedge PRESETN) begin
+        if (!PRESETN) reset_pipe <= '0;
+        else reset_pipe <= {reset_pipe[0], 1'b1};
+    end
+
+    // Only completer 0 is populated. Unmapped accesses complete with zero
+    // and writes have no effect. There is no PSLVERR port in this interface.
+    assign PRDATA = psel[0] ? gpio_rdata : '0;
+    assign PREADY = psel[0] ? gpio_ready : (PSEL && PENABLE);
 
 
 apb_requester #(
-    .GpioWidth(GpioWidth),
     .ApbDataWidth(ApbDataWidth),
     .ApbAddrWidth(ApbAddrWidth)
 ) requester_inst (
     .PCLK(PCLK),
-    .PRESETN(PRESETN),
+    .PRESETN(resetn_sync),
     .start(start),
     .addr_in(addr_in),
     .write_in(write_in),
@@ -59,9 +74,10 @@ apb_requester #(
 );
 
 apb_decoder #(
-    .NUM_COMPLETERS(2)
+    .NUM_COMPLETERS(2),
+    .ApbAddrWidth(ApbAddrWidth)
 ) decoder_inst (
-    .PADDR(PADDR[7:0]),
+    .PADDR(PADDR),
     .psel_req(PSEL),
     .psel(psel)
 );
@@ -72,14 +88,14 @@ apb_completer #(
     .ApbAddrWidth(ApbAddrWidth)
 ) completer_inst (
     .PCLK(PCLK),
-    .PRESETN(PRESETN),
+    .PRESETN(resetn_sync),
     .PADDR(PADDR),
     .PSEL(psel[0]),
     .PENABLE(PENABLE),
     .PWDATA(PWDATA),
     .PWRITE(PWRITE),
-    .PRDATA(PRDATA),
-    .PREADY(PREADY),
+    .PRDATA(gpio_rdata),
+    .PREADY(gpio_ready),
 
     // GPIO Entries
     .gpio_i(gpio_i),

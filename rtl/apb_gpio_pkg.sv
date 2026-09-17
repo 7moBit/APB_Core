@@ -1,6 +1,7 @@
+`timescale 1ns/1ps
 package apb_gpio_pkg;
 
-    timeunit 1ns/1ps;
+    timeunit 1ns; timeprecision 1ps;
 
     typedef enum logic [7:0] {
         ADDR_DATA      = 8'h00, // R   - synchronized gpio_i
@@ -12,7 +13,7 @@ package apb_gpio_pkg;
     } apb_gpio_addr_e;
 
     parameter logic [7:0] COMPLETER0_BASE  = 8'h00;
-    parameter logic [7:0] COMPLETER0_LIMIT = 8'h80;   // inclusive upper bound
+    parameter logic [7:0] COMPLETER0_LIMIT = 8'h7F;   // inclusive upper bound
 
     parameter logic [7:0] COMPLETER1_BASE  = 8'h80;   // inclusive lower bound
     parameter logic [7:0] COMPLETER1_LIMIT = 8'hFF;

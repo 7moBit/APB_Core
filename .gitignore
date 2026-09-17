@@ -1,0 +1,43 @@
+# Vivado: archivos generados
+.Xil/
+*.cache/
+*.runs/
+*.sim/
+*.hw/
+*.gen/
+*.ip_user_files/
+
+# Compilación, simulación y reportes reproducibles
+build/
+reports/
+work/
+xsim.dir/
+modelsim.ini
+transcript
+*.wlf
+*.wdb
+*.vcd
+*.vvp
+*.jou
+*.log
+*.pb
+*.str
+*.rpt
+*.dcp
+*.bit
+*.bin
+*.ltx
+*.vds
+*.vstf
+*.cr.mti
+
+# Respaldos y temporales
+*.bak
+*.backup
+*.tmp
+*.swp
+*~
+
+# Windows
+Thumbs.db
+Desktop.ini
