@@ -33,4 +33,55 @@ module apb_top
     logic [GpioWidth-1:0]    gpio_t;
     logic [GpioWidth-1:0]    gpio_o;
 
+apb_requester #(
+    .GpioWidth(GpioWidth),
+    .ApbDataWidth(ApbDataWidth),
+    .ApbAddrWidth(ApbAddrWidth)
+) requester_inst (
+    .PCLK(PCLK),
+    .PRESETN(PRESETN),
+    .start(start),
+    .addr_in(addr_in),
+    .write_in(write_in),
+    .wdata_in(wdata_in),
+    .busy(busy),
+    .rdata_out(rdata_out),
+
+    // APB Entries
+    .PADDR(PADDR),
+    .PSEL(PSEL),
+    .PENABLE(PENABLE),
+    .PWDATA(PWDATA),
+    .PWRITE(PWRITE),
+    .PRDATA(PRDATA),
+    .PREADY(PREADY)
+);
+
+apb_decoder #(
+    .NUM_COMPLETERS(2)
+) decoder_inst (
+    .PADDR(PADDR[7:0]),
+    .psel_req(PSEL),
+    .psel(psel)
+);
+
+apb_completer #(
+    .GpioWidth(GpioWidth),
+    .ApbDataWidth(ApbDataWidth)
+) completer_inst (
+    .PCLK(PCLK),
+    .PRESETN(PRESETN),
+    .PSEL(psel[0]),
+    .PENABLE(PENABLE),
+    .PWDATA(PWDATA),
+    .PWRITE(PWRITE),
+    .PRDATA(PRDATA),
+    .PREADY(PREADY),
+
+    // GPIO Entries
+    .gpio_i(gpio_i),
+    .gpio_t(gpio_t),
+    .gpio_o(gpio_o)
+);
+
 endmodule
