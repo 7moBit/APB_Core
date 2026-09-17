@@ -1,6 +1,6 @@
-import apb_gpio_pkg::*;
-
-module apb_decoder #(
+module apb_decoder 
+    import apb_gpio_pkg::*;
+#(
     parameter int NUM_COMPLETERS = 2
 )(
     input  logic [7:0]                    PADDR,
