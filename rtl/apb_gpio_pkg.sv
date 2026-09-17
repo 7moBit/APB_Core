@@ -11,5 +11,6 @@ package apb_gpio_pkg;
         ADDR_INT_EDGE  = 8'h14  // R/W - per-bit edge(1)/level(0)
     } apb_gpio_addr_e;
 
+    typedef enum logic [1:0] {IDLE, SETUP, ACCESS} state_t;
  
 endpackage
