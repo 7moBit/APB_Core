@@ -94,9 +94,3 @@ fuente/destino sincronicos concretos (por ejemplo, un controlador registrado
 de prueba dentro de la FPGA) y evaluar el conjunto con su distribucion real
 del reloj. No se han relajado los presupuestos ni agregado falsas rutas a
 las entradas sincronas para ocultar las violaciones.
-
-## Pendientes
-- 1. Cerrar tiempos a 150 MHz. El documento registra setup positivo, pero hold global de −1.309 ns. Falta integrar una fuente y un destino síncronos concretos y repetir el análisis del conjunto.
-- 2. Recompilar y verificar ModelSim desde cero. El transcript tiene PASS, pero también 13 advertencias, mientras el documento indica cero. Hay que actualizar la evidencia con los fuentes actuales.
-- 3. Preparar un README con arquitectura, mapa de registros y pasos para reproducir simulación y síntesis.
-Las simulaciones funcionales y del wrapper IOBUF ya están documentadas como aprobadas. Pines y bitstream solo faltarían si la entrega exige probar en tarjeta; el alcance documentado no la requiere.
